@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=3 uid="uid://dn8byngbvxy2j"]
+
+[ext_resource type="Script" path="res://Multiplayer/multi_player_menu.gd" id="1_0rm5w"]
+[ext_resource type="FontFile" uid="uid://f4pv31bv20w0" path="res://assets/PoetsenOne-Regular.ttf" id="2_0d7d4"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vjw2g"]
+font = ExtResource("2_0d7d4")
+font_size = 40
+
+[node name="MultiPlayerMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0rm5w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -266.0
+offset_right = 266.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "PONG GAME"
+label_settings = SubResource("LabelSettings_vjw2g")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerName" type="TextEdit" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+placeholder_text = "											Select Player 1 name"
+
+[node name="ColorPlayer" type="ColorPickerButton" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="PlayerName1" type="TextEdit" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+placeholder_text = "											Select Player 2 name"
+
+[node name="ColorPlayer1" type="ColorPickerButton" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start Game"
+
+[node name="BackButton" type="Button" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

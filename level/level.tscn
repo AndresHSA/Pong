@@ -1,0 +1,153 @@
+[gd_scene load_steps=12 format=3 uid="uid://b3uyjbg53ywrg"]
+
+[ext_resource type="PackedScene" uid="uid://b8euvx1om8p61" path="res://player/player_paddle.tscn" id="1_0d0wr"]
+[ext_resource type="Script" path="res://level/level.gd" id="1_88fk4"]
+[ext_resource type="FontFile" uid="uid://f4pv31bv20w0" path="res://assets/PoetsenOne-Regular.ttf" id="2_6wduj"]
+[ext_resource type="PackedScene" uid="uid://bmyvm8a2gelhy" path="res://opponent/opponent.tscn" id="2_rhniu"]
+[ext_resource type="PackedScene" uid="uid://dt6y7jtwcfg3o" path="res://ball/ball.tscn" id="3_w428l"]
+[ext_resource type="AudioStream" uid="uid://dm13dphhneqr5" path="res://assets/ping_pong_8bit_beeep.ogg" id="6_nvtca"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_urhdp"]
+font = ExtResource("2_6wduj")
+font_size = 40
+font_color = Color(0.85098, 0.847059, 0.843137, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_bvbkb"]
+font = ExtResource("2_6wduj")
+font_size = 40
+font_color = Color(0.85098, 0.847059, 0.843137, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_e72xo"]
+font = ExtResource("2_6wduj")
+font_size = 50
+font_color = Color(0.94902, 0.392157, 0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ra2h7"]
+size = Vector2(1188, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hd5sa"]
+size = Vector2(68, 637)
+
+[node name="Level" type="Node"]
+script = ExtResource("1_88fk4")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0784314, 0.129412, 0.14902, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="PlayerScore" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_urhdp")
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 150
+
+[node name="OpponentScore" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_bvbkb")
+
+[node name="CountdownLabel" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -159.0
+offset_right = 20.0
+offset_bottom = -136.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Countdown"
+label_settings = SubResource("LabelSettings_e72xo")
+horizontal_alignment = 1
+
+[node name="PlayerName" type="Label" parent="."]
+unique_name_in_owner = true
+offset_right = 26.0
+offset_bottom = 51.0
+text = "Player Name"
+label_settings = SubResource("LabelSettings_bvbkb")
+
+[node name="CPU" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 901.0
+offset_right = 1140.0
+offset_bottom = 51.0
+text = "CPU"
+label_settings = SubResource("LabelSettings_bvbkb")
+
+[node name="PlayerPaddle" parent="." instance=ExtResource("1_0d0wr")]
+position = Vector2(16, 321)
+
+[node name="WallTop" type="StaticBody2D" parent="."]
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTop"]
+position = Vector2(563, -10)
+shape = SubResource("RectangleShape2D_ra2h7")
+
+[node name="WallBottom" type="StaticBody2D" parent="."]
+position = Vector2(1, 668)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallBottom"]
+position = Vector2(563, -10)
+shape = SubResource("RectangleShape2D_ra2h7")
+
+[node name="Opponent" parent="." node_paths=PackedStringArray("ball") instance=ExtResource("2_rhniu")]
+position = Vector2(1137, 321)
+ball = NodePath("../Ball")
+
+[node name="Ball" parent="." instance=ExtResource("3_w428l")]
+unique_name_in_owner = true
+position = Vector2(576, 324)
+
+[node name="WallLeft" type="Area2D" parent="."]
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallLeft"]
+position = Vector2(-44, 323.5)
+shape = SubResource("RectangleShape2D_hd5sa")
+
+[node name="WallRight" type="Area2D" parent="."]
+position = Vector2(1237, 0)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight"]
+position = Vector2(-44, 323.5)
+shape = SubResource("RectangleShape2D_hd5sa")
+
+[node name="CountdownTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[node name="ScoreSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("6_nvtca")
+
+[connection signal="body_entered" from="WallLeft" to="." method="_on_wall_left_body_entered"]
+[connection signal="body_entered" from="WallRight" to="." method="_on_wall_right_body_entered"]
+[connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]
